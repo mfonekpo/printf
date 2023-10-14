@@ -1,0 +1,64 @@
+#include "main.h"
+
+/
+ * _printf - Our custom printf function.
+ * @format: The string format to print.
+ * Return: Number of characters printed.
+ */
+int _printf5(const char *format, ...)
+{
+    va_list args;
+    int i = 0, count = 0;
+    char *str;
+
+    if (!format)
+        return (-1);
+
+    va_start(args, format);
+    while (format && format[i])
+    {
+        if (format[i] == '%' && format[i + 1] == 'S')
+        {
+            str = va_arg(args, char *);
+            custom_print_string(str);
+            i++; // To skip the 'S'
+        }
+        else
+        {
+            write(1, &format[i], 1);
+            count++;
+        }
+        i++;
+    }
+    va_end(args);
+    return (count);
+}
+
+/
+ * custom_print_string - Print a string and handle non-printable characters.
+ * @str: The string to print.
+ */
+void custom_print_string(char *str)
+{
+    int i = 0;
+    while (str && str[i])
+    {
+        if ((str[i] > 0 && str[i] < 32) || str[i] >= 127)
+        {
+            char first, second;
+            write(1, "\\x", 2);
+            first = str[i] / 16;
+            second = str[i] % 16;
+            first += first > 9 ? 'A' - 10 : '0';
+            second += second > 9 ? 'A' - 10 : '0';
+            write(1, &first, 1);
+            write(1, &second, 1);
+        }
+        else
+        {
+            write(1, &str[i], 1);
+        }
+        i++;
+    }
+    write(1, "\n", 1); // Ensuring newline at the end as per constraints
+}

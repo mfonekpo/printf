@@ -11,5 +11,7 @@ int _printf3(const char *format, ...);
 int print_binary(unsigned int num);
 int _printf4(const char *format, ...);
 void buffer_to_stdout(void);
+int _printf5(const char *format, ...);
+void custom_print_string(char *str);
 #endif /* MAIN_H */
 
