@@ -1,0 +1,53 @@
+#include "main.h"
+
+/**
+ * _printf - Custom printf function
+ * @format: Format string
+ * @...: Variable number of arguments
+ *
+ * Return: Number of characters printed
+ */
+int _printf3(const char *format, ...)
+{
+    int printed_chars = 0;
+    va_list args;
+
+    va_start(args, format);
+
+    while (*format)
+    {
+        if (*format == '%')
+        {
+            format++; // Move to the character after '%'
+            if (*format == 'b')
+            {
+                unsigned int num = va_arg(args, unsigned int);
+                printed_chars += print_binary(num);
+            }
+            // Add more custom specifiers as needed
+        }
+        else
+        {
+            putchar(*format); // Replace with your custom printing function
+            printed_chars++;
+        }
+        format++;
+    }
+
+    va_end(args);
+    return printed_chars;
+}
+
+/**
+ * print_binary - Custom function to print an unsigned int in binary
+ * @num: Unsigned int to print in binary
+ *
+ * Return: Number of characters printed
+ */
+int print_binary(unsigned int num)
+{
+    // Implement binary conversion and printing logic here
+    // Return the number of characters printed
+}
+
+
