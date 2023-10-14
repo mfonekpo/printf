@@ -13,5 +13,9 @@ int _printf4(const char *format, ...);
 void buffer_to_stdout(void);
 int _printf5(const char *format, ...);
 void custom_print_string(char *str);
+int _printf6(const char *format, ...);
+void print_pointer(void *ptr);
+
+
 #endif /* MAIN_H */
 
