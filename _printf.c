@@ -81,7 +81,7 @@ int _printf(const char *format, ...)
 					str = va_arg(list, char *);
 					count += handle_S(str);
 				}
-				else if(format[i] == 'r')
+				else if (format[i] == 'r')
 				{
 					str = va_arg(list, char *);
 					count += print_rev(str);
@@ -181,13 +181,13 @@ int handle_S(char *str)
  */
 int print_rev(char *s)
 {
-        int i, count = 0;
+int i, count = 0;
 
 	if (s)
 	{
-        	i = 0;
-        	while (s[i] != '\0')
-        	{
+i = 0;
+while (s[i] != '\0')
+{
                 	i++;
         	}
         	i--;
