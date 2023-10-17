@@ -3,7 +3,6 @@ int print_rev(char *s);
 int print_str(char *str);
 int handle_S(char *str);
 
-
 /**
  * _printf - produces output according to a format
  * @format: character string
@@ -57,11 +56,11 @@ int _printf(const char *format, ...)
 					else
 					{
 						mask >>= 1;
-					while (mask)
-					{
-						putchar((n & mask) ? '1' : '0');
-						mask >>= 1;
-					}
+						while (mask)
+						{
+							putchar((n & mask) ? '1' : '0');
+							mask >>= 1;
+						}
 					}
 				}
 				else if (format[i] == 'd' || format[i] == 'i')
@@ -88,7 +87,6 @@ int _printf(const char *format, ...)
 				}
 				else if (format[i] == '\0')
 					return (-1);
-
 				else
 				{
 					putchar(format[i - 1]);
@@ -106,7 +104,6 @@ int _printf(const char *format, ...)
 	}
 	else
 		return (-1);
-
 	return (count);
 }
 
@@ -137,7 +134,6 @@ int print_str(char *str)
 			count += 1;
 		}
 	}
-
 	return (count);
 }
 
@@ -153,7 +149,6 @@ int handle_S(char *str)
 
 	if (str == NULL)
 		return (-1);
-
 	for (i = 0; str[i] != '\0'; i++)
 	{
 		if ((str[i] > 0 && str[i] < 32) || str[i] >= 127)
@@ -169,7 +164,6 @@ int handle_S(char *str)
 			count += 1;
 		}
 	}
-
 	return (count);
 }
 
@@ -181,22 +175,23 @@ int handle_S(char *str)
  */
 int print_rev(char *s)
 {
-int i, count = 0;
+	int i, count = 0;
 
 	if (s)
 	{
-i = 0;
-while (s[i] != '\0')
-{
-                	i++;
-        	}
-        	i--;
-        	while (i >= 0)
-        	{
-                	putchar(s[i]);
+		i = 0;
+		while (s[i] != '\0')
+		{
+			i++;
+		}
+		i--;
+		while (i >= 0)
+		{
+			putchar(s[i]);
 			count += 1;
-                	i--;
-        	}
+			i--;
+		}
 	}
-        return (count);
+	return (count);
 }
+
