@@ -1,66 +1,202 @@
 #include "main.h"
+int print_rev(char *s);
+int print_str(char *str);
+int handle_S(char *str);
 
-void print_buffer(char buffer[], int *buff_ind);
 
 /**
- * _printf - Printf function
- * @format: format.
- * Return: Printed chars.
+ * _printf - produces output according to a format
+ * @format: character string
+ *
+ * Return: number of characters printed
  */
 int _printf(const char *format, ...)
 {
-	int i, printed = 0, printed_chars = 0;
-	int flags, width, precision, size, buff_ind = 0;
+	char *str;
+	unsigned long int i, count = 0;
 	va_list list;
-	char buffer[BUFF_SIZE];
-
-	if (format == NULL)
-		return (-1);
 
 	va_start(list, format);
-
-	for (i = 0; format && format[i] != '\0'; i++)
+	if (format)
 	{
-		if (format[i] != '%')
+		for (i = 0; i < strlen(format); i++)
 		{
-			buffer[buff_ind++] = format[i];
-			if (buff_ind == BUFF_SIZE)
-				print_buffer(buffer, &buff_ind);
-			/* write(1, &format[i], 1);*/
-			printed_chars++;
+			if (format[i] == '%')
+			{
+				i++;
+				if (format[i] == 'c')
+				{
+					putchar(va_arg(list, int));
+					count += 1;
+				}
+				else if (format[i] == 's')
+				{
+					str = va_arg(list, char *);
+					count += print_str(str);
+				}
+				else if (format[i] == '%')
+				{
+					putchar('%');
+					count += 1;
+				}
+				else if (format[i] == 'b')
+				{
+					unsigned int n = va_arg(list, unsigned int);
+					int bits = 0;
+					unsigned int mask = 1;
+
+					while (mask <= n)
+					{
+						bits++;
+						mask <<= 1;
+					}
+					if (bits == 0)
+					{
+						putchar('0');
+					}
+					else
+					{
+						mask >>= 1;
+					while (mask)
+					{
+						putchar((n & mask) ? '1' : '0');
+						mask >>= 1;
+					}
+					}
+				}
+				else if (format[i] == 'd' || format[i] == 'i')
+					count += printf("%d", va_arg(list, int));
+				else if (format[i] == 'u')
+					count += printf("%u", va_arg(list, int));
+				else if (format[i] == 'o')
+					count += printf("%o", va_arg(list, int));
+				else if (format[i] == 'x')
+					count += printf("%x", va_arg(list, int));
+				else if (format[i] == 'X')
+					count += printf("%X", va_arg(list, int));
+				else if (format[i] == 'p')
+					count += printf("%p", va_arg(list, void *));
+				else if (format[i] == 'S')
+				{
+					str = va_arg(list, char *);
+					count += handle_S(str);
+				}
+				else if(format[i] == 'r')
+				{
+					str = va_arg(list, char *);
+					count += print_rev(str);
+				}
+				else if (format[i] == '\0')
+					return (-1);
+
+				else
+				{
+					putchar(format[i - 1]);
+					putchar(format[i]);
+					count += 2;
+				}
+			}
+			else
+			{
+				putchar(format[i]);
+				count += 1;
+			}
 		}
-		else
-		{
-			print_buffer(buffer, &buff_ind);
-			flags = get_flags(format, &i);
-			width = get_width(format, &i, list);
-			precision = get_precision(format, &i, list);
-			size = get_size(format, &i);
-			++i;
-			printed = handle_print(format, &i, list, buffer,
-				flags, width, precision, size);
-			if (printed == -1)
-				return (-1);
-			printed_chars += printed;
-		}
+		va_end(list);
 	}
+	else
+		return (-1);
 
-	print_buffer(buffer, &buff_ind);
-
-	va_end(list);
-
-	return (printed_chars);
+	return (count);
 }
 
 /**
- * print_buffer - Prints the contents of the buffer if it exist
- * @buffer: Array of chars
- * @buff_ind: Index at which to add next char, represents the length.
+ * print_str - print the string
+ * @str: string to be printed
+ *
+ * Return: number of characters printed
  */
-void print_buffer(char buffer[], int *buff_ind)
+int print_str(char *str)
 {
-	if (*buff_ind > 0)
-		write(1, &buffer[0], *buff_ind);
+	unsigned long int j, count = 0;
 
-	*buff_ind = 0;
+	if (str)
+	{
+		for (j = 0; j < strlen(str); j++)
+		{
+			putchar(str[j]);
+			count += 1;
+		}
+	}
+	else
+	{
+		str = "(null)";
+		for (j = 0; j < strlen(str); j++)
+		{
+			putchar(str[j]);
+			count += 1;
+		}
+	}
+
+	return (count);
+}
+
+/**
+ * handle_S - prints the string
+ * @str: string to be printed
+ *
+ * Return: number of characters printed
+ */
+int handle_S(char *str)
+{
+	int i, count = 0;
+
+	if (str == NULL)
+		return (-1);
+
+	for (i = 0; str[i] != '\0'; i++)
+	{
+		if ((str[i] > 0 && str[i] < 32) || str[i] >= 127)
+		{
+			putchar('\\');
+			putchar('x');
+			count += 2;
+			count += printf("%02X", str[i]);
+		}
+		else
+		{
+			putchar(str[i]);
+			count += 1;
+		}
+	}
+
+	return (count);
+}
+
+/**
+ * print_rev - prints a string, in reverse
+ * @s: the string
+ *
+ * Return: void
+ */
+int print_rev(char *s)
+{
+        int i, count = 0;
+
+	if (s)
+	{
+        	i = 0;
+        	while (s[i] != '\0')
+        	{
+                	i++;
+        	}
+        	i--;
+        	while (i >= 0)
+        	{
+                	putchar(s[i]);
+			count += 1;
+                	i--;
+        	}
+	}
+        return (count);
 }
